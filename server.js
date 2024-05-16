@@ -7,6 +7,7 @@ import DB_connection from './src/utils/database/connection.js';
 import teacharRouter from "./src/routers/teacharRouter/teacharRouter.js";
 import adminRouter from "./src/routers/adminRouter/adminRouter.js";
 // ======== Middleware ========
+app.use(express.json());
 // -------- routes -----
 app.use("/student", studentRouter);
 app.use("/teachar", teacharRouter)

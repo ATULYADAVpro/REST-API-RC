@@ -2,6 +2,7 @@ import studentControllers from '../../controllers/studentControllers/studentCont
 import express from 'express';
 const studentRouter = express.Router();
 
-studentRouter.get("/", studentControllers.getAllStudents)
+studentRouter.get("/", studentControllers.getAllStudents);
+studentRouter.post("/add", studentControllers.addStudent);
 
 export default studentRouter;
