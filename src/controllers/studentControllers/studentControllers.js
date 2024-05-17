@@ -1,38 +1,44 @@
 import Joi from "joi";
 import StudentAddModels from "../../models/studentModels/studentAddModels.js";
+import SemesterDetails from "../../models/studentModels/SemesterDetails_Models.js";
+import CustomErrorHandler from "../../utils/services/CustomErrorHandler.js";
+
 
 const studentControllers = {
     getAllStudents(req, res) {
         res.send("Working")
     },
-    async addStudent(req, res) {
+    async addStudent(req, res, next) {
         //------ Validate ------
         const studentAddSchema = Joi.object({
             firstName: Joi.string().min(3).required(),
             fatherName: Joi.string().min(3).required(),
             motherName: Joi.string().min(3).required(),
             stream: Joi.string().min(3).required(),
-            // rollNo: Joi.string().min(3).required(),
-            // rollNo_prefix: Joi.string().min(2).required(),
             prn: Joi.string().min(3).required(),
-            dob: Joi.string().required()
+            dob: Joi.string().required(),
+            rollNoPrefix: Joi.string().required()
 
         })
         const { error } = studentAddSchema.validate(req.body);
-        if (error) { console.log("Error From Validattion" + error) }
+        if (error) { return next(error) }
+        const { firstName, fatherName, motherName, stream, prn, dob, rollNoPrefix } = req.body;
 
-        // --------- check user already register ----------
-        const { rollNo, prn, firstName, fatherName, motherName, stream, dob } = req.body;
-        let studentExists = await StudentAddModels.exists({ rollNo: rollNo, prn: prn })
-        if (studentExists) { console.log("Already exists" + studentExists) }
-        const result = new StudentAddModels({ prn, firstName, fatherName, motherName, stream, dob })
-
+        // ------- check User already exist -----
         try {
-            await result.save();
+            const exist = await StudentAddModels.exists({ prn, rollNoPrefix })
+            if (exist) {
+                return next(CustomErrorHandler.alreadyExist("Already Student Taken Addmission"))
+            }
+            let addmission = new StudentAddModels({ firstName, fatherName, motherName, stream, prn, dob, rollNoPrefix })
+            await addmission.save();
+
+            res.status(200).json({ Store: addmission })
+
         } catch (err) {
-            console.log("When save data error occurn :" + err)
+            return next(err)
         }
-        res.json({ data: result })
+
 
     }
 }

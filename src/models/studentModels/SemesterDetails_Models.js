@@ -1,0 +1,12 @@
+import mongoose from "mongoose";
+const Schema = mongoose.Schema;
+
+const SemesterDetailsSchema = new Schema({
+    semNo: { type: String, required: true },
+    semYear: { type: String, required: true },
+    semStudent_Type: { type: String, required: true },
+    student_Details: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' }
+}, { timestamps: true });
+
+const SemesterDetails = mongoose.model("Semester_Details", SemesterDetailsSchema);
+export default SemesterDetails;
