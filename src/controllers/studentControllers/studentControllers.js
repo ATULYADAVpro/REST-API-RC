@@ -2,10 +2,11 @@ import Joi from "joi";
 import StudentAddModels from "../../models/studentModels/studentAddModels.js";
 import SemisterDetails from "../../models/studentModels/SemesterDetails_Models.js";
 import CustomErrorHandler from "../../utils/services/CustomErrorHandler.js";
+import SubjectDetails from "../../models/studentModels/subjectModel.js";
 
 
 const studentControllers = {
-    getAllStudents(req, res) {
+    async getAllStudents(req, res) {
         res.send("Working")
     },
 
@@ -74,7 +75,42 @@ const studentControllers = {
         }
 
 
+    },
+
+    async addSubjects(req, res, next) {
+        const { rollNo, semNo, semYear, subjectName, subjectCode, internalMark, externalMark } = req.body;
+
+        try {
+            // Check if semester exists with given semNo and semYear
+            const semesterExists = await SemisterDetails.findOne({ semNo, semYear })
+                .populate({ path: "student_Details", match: { rollNo } })
+                .populate({ path: "subjects" });
+
+            // If semester or student doesn't exist, throw an error
+            if (!semesterExists || !semesterExists.student_Details) {
+                return next(CustomErrorHandler.alreadyExist("Semester or student does not exist."));
+            }
+
+            // Check if the subject already exists
+            const subjectExists = semesterExists.subjects.find(subject => subject.subjectCode === subjectCode);
+
+            if (!subjectExists) {
+                // If subject doesn't exist, create a new subject and add it to the semester
+                const newSubject = new SubjectDetails({ subjectName, subjectCode, internalMark, externalMark });
+                await newSubject.save();
+
+                semesterExists.subjects.push(newSubject);
+                await semesterExists.save();
+
+                return res.json({ message: "Subject added successfully" });
+            } else {
+                return res.json({ message: "Subject already exists" });
+            }
+        } catch (error) {
+            return next(error); // Pass any errors to the next middleware
+        }
     }
+
 }
 
 export default studentControllers;

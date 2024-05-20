@@ -5,6 +5,7 @@ const studentRouter = express.Router();
 studentRouter.get("/", studentControllers.getAllStudents);
 studentRouter.post("/add", studentControllers.addStudent);
 studentRouter.post("/addSemister", studentControllers.addSemister);
+studentRouter.post("/addSemister/addSubject", studentControllers.addSubjects);
 // studentRouter.post("/getSemister", studentControllers.getSemister);
 
 export default studentRouter;
