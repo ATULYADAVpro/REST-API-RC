@@ -8,7 +8,7 @@ const studentSchema = new Schema({
     stream: { type: String, required: true },
     rollNoPrefix: { type: String, required: true },  // New field for dynamic prefix
     rollNo: { type: String, unique: true },
-    prn: { type: String, required: true, unique: true },
+    prn: { type: Number, required: true, unique: true },
     dob: { type: String, required: true },
     semester: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SemesterDetails' }]
 }, { timestamps: true });

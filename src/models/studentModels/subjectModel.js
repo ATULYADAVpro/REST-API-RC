@@ -11,4 +11,4 @@ const subjectDetailsSchema = new Schema({
 
 const SubjectDetails = mongoose.model('SubjectDetails', subjectDetailsSchema);
 
-export default SubjectDetails;
+export default SubjectDetails; 

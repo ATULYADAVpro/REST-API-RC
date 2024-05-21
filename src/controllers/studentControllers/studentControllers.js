@@ -6,10 +6,6 @@ import SubjectDetails from "../../models/studentModels/subjectModel.js";
 
 
 const studentControllers = {
-    async getAllStudents(req, res) {
-        res.send("Working")
-    },
-
     async addStudent(req, res, next) {
         //------ Validate ------
         const studentAddSchema = Joi.object({
@@ -108,6 +104,45 @@ const studentControllers = {
             }
         } catch (error) {
             return next(error); // Pass any errors to the next middleware
+        }
+    },
+
+    async getAllStudent(req, res, next) {
+        try {
+            const student = await StudentAddModels.find().select("-createdAt -_id -updatedAt -__v -rollNoPrefix").populate({
+                path: "semester",
+                select: "-createdAt -_id -student_Details -updatedAt -__v",
+                populate: {
+                    path: "subjects",
+                    select: "-createdAt -_id -updatedAt -__v"
+                }
+            })
+            if (!student) { return next(CustomErrorHandler.notFoundData("Not found student")) }
+
+            res.send(student)
+
+        } catch (error) {
+            return next(error)
+        }
+    },
+
+    async getSingalStudent(req, res, next) {
+        try {
+            const { rollNo } = req.body;
+            const student = await StudentAddModels.find({ rollNo }).select("-createdAt -_id -updatedAt -__v -rollNoPrefix").populate({
+                path: "semester",
+                select: "-createdAt -_id -student_Details -updatedAt -__v",
+                populate: {
+                    path: "subjects",
+                    select: "-createdAt -_id -updatedAt -__v"
+                }
+            })
+            if (!student) { return next(CustomErrorHandler.notFoundData("Not found student")) }
+
+            res.send(student)
+
+        } catch (error) {
+            return next(error)
         }
     }
 

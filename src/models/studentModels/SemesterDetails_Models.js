@@ -9,5 +9,5 @@ const SemesterDetailsSchema = new Schema({
     subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SubjectDetails' }]
 }, { timestamps: true });
 
-const SemesterDetails = mongoose.model("Semester_Details", SemesterDetailsSchema);
-export default SemesterDetails;
+const SemesterDetails = mongoose.model("SemesterDetails", SemesterDetailsSchema);
+export default SemesterDetails; 

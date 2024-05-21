@@ -2,10 +2,14 @@ import studentControllers from '../../controllers/studentControllers/studentCont
 import express from 'express';
 const studentRouter = express.Router();
 
-studentRouter.get("/", studentControllers.getAllStudents);
+// =============== Add Data ===================
 studentRouter.post("/add", studentControllers.addStudent);
 studentRouter.post("/addSemister", studentControllers.addSemister);
 studentRouter.post("/addSemister/addSubject", studentControllers.addSubjects);
-// studentRouter.post("/getSemister", studentControllers.getSemister);
+
+// ============== GET DATA ==================
+studentRouter.get("/all", studentControllers.getAllStudent);
+studentRouter.get("/singal", studentControllers.getSingalStudent);
+
 
 export default studentRouter;
