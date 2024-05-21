@@ -128,7 +128,8 @@ const studentControllers = {
 
     async getSingalStudent(req, res, next) {
         try {
-            const { rollNo } = req.body;
+            const { rollNo } = req.params;
+            console.log(rollNo)
             const student = await StudentAddModels.find({ rollNo }).select("-createdAt -_id -updatedAt -__v -rollNoPrefix").populate({
                 path: "semester",
                 select: "-createdAt -_id -student_Details -updatedAt -__v",

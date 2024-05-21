@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
     firstName: { type: String, required: true },
+    surName: { type: String, required: true },
     fatherName: { type: String, required: true },
     motherName: { type: String, required: true },
     stream: { type: String, required: true },

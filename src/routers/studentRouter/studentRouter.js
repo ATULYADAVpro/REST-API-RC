@@ -9,7 +9,8 @@ studentRouter.post("/addSemister/addSubject", studentControllers.addSubjects);
 
 // ============== GET DATA ==================
 studentRouter.get("/all", studentControllers.getAllStudent);
-studentRouter.get("/singal", studentControllers.getSingalStudent);
+studentRouter.get("/singal/:rollNo", studentControllers.getSingalStudent);
+
 
 
 export default studentRouter;
